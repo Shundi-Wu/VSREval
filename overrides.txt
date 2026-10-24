@@ -1,4 +1,0 @@
-# pyiqa requires these two, neither is used by any metric: openai-clip installs an empty `clip` package that shadows
-# clip-anytorch (CLIP-IQA then fails to import), filterpy does not build. `uv sync` applies the same through pyproject.toml.
-openai-clip; sys_platform == "never"
-filterpy; sys_platform == "never"

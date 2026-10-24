@@ -20,8 +20,7 @@ dependencies = [
   "tqdm",
   "imageio",
   "imageio-ffmpeg",
-  "clip-anytorch",    # the `clip` module pyiqa needs, see override-dependencies below
-  "setuptools<82",    # clip does `from pkg_resources import packaging`; setuptools 82 removed pkg_resources
+  "setuptools<82",    # the `clip` module pyiqa needs does `from pkg_resources import packaging`; setuptools 82 removed pkg_resources
 ]
 
 [project.scripts]
@@ -32,11 +31,6 @@ packages = ["src/vsreval"]
 
 [dependency-groups]
 dev = ["pytest>=9.1.1"]
-
-[tool.uv]
-# pyiqa depends on openai-clip, an sdist whose build produces empty modules with current toolchains; clip-anytorch ships the same `clip`
-# module as a wheel. pyiqa -> facexlib -> filterpy is face tracking, not used by any metric here, and its sdist does not build either.
-override-dependencies = ["openai-clip; sys_platform == 'never'", "filterpy; sys_platform == 'never'"]
 
 [tool.uv.sources]
 torch = { index = "pytorch-cu124" }
