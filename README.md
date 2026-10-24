@@ -15,16 +15,18 @@ Image metrics are the mean over the frames of a video; every metric is then aver
 ## Install and use
 
 ```bash
-# inside a clone: one environment for all metrics
+# from PyPI: a command available everywhere, in its own isolated environment
+uv tool install vsreval
+vsreval weights --download                            # DOVER / FasterVQA / RAFT weights -> ~/.cache/vsreval/weights ($VSREVAL_WEIGHTS)
+vsreval eval --pred results/UDM10 --gt datasets/UDM10/GT-Video --out results/UDM10/vsreval
+uvx vsreval eval --pred results/UDM10 --metrics dover,fastervqa,ewarp     # without installing; no ground truth needed
+
+# from a clone: one environment with the exact versions of uv.lock
 git clone https://github.com/Shundi-Wu/VSREval && cd VSREval && uv sync
-uv run vsreval weights --download                     # DOVER / FasterVQA / RAFT weights -> ~/.cache/vsreval/weights ($VSREVAL_WEIGHTS)
-
 uv run vsreval eval --pred results/UDM10 --gt datasets/UDM10/GT-Video --out results/UDM10/vsreval
-uv run vsreval eval --pred results/UDM10 --metrics dover,fastervqa,ewarp          # no ground truth needed
 
-# or as a command available everywhere, in its own isolated environment
+# the latest, unreleased version
 uv tool install git+https://github.com/Shundi-Wu/VSREval
-uvx --from git+https://github.com/Shundi-Wu/VSREval vsreval eval ...   # without installing
 ```
 
 If the uv cache lives on a network drive (NFS), uv can read freshly written files back empty: installs then fail or produce empty packages
