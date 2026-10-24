@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]  # PEP 639 licence metadata
 build-backend = "hatchling.build"
 
 [project]
@@ -8,6 +8,18 @@ version = "0.1.0"
 description = "Evaluation bench for video super-resolution: image metrics (via pyiqa) and the video metrics DOVER, FasterVQA and E*warp."
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
+license = "MIT"
+license-files = ["LICENSE", "src/vsreval/_vendor/*/LICENSE"]   # the vendored DOVER / FAST-VQA / RAFT keep their own licences
+authors = [{ name = "Shundi Wu" }]
+keywords = ["video super-resolution", "evaluation", "metrics", "benchmark", "video quality assessment"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Image Processing",
+]
 dependencies = [
   # torch, torchvision (tensor ops), opencv and imageio-ffmpeg (decoding, and the ffmpeg that writes the canonical files) are kept in the
   # series the scores were produced with, because the metric values depend on them; pyiqa (metric definitions) is open from the tested version
@@ -24,6 +36,10 @@ dependencies = [
   "imageio",
   "setuptools<82",                  # the `clip` module pyiqa needs does `from pkg_resources import packaging`; setuptools 82 removed pkg_resources
 ]
+
+[project.urls]
+Homepage = "https://github.com/Shundi-Wu/VSREval"
+Issues = "https://github.com/Shundi-Wu/VSREval/issues"
 
 [project.scripts]
 vsreval = "vsreval.cli:main"
