@@ -9,18 +9,20 @@ description = "Evaluation bench for video super-resolution: image metrics (via p
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
 dependencies = [
-  "torch>=2.5",
-  "torchvision>=0.20",
-  "numpy>=1.26,<2",   # decord's wheels are built against the numpy 1.x ABI
-  "opencv-python-headless",
+  # torch, torchvision (tensor ops), opencv and imageio-ffmpeg (decoding, and the ffmpeg that writes the canonical files) are kept in the
+  # series the scores were produced with, because the metric values depend on them; pyiqa (metric definitions) is open from the tested version
+  "torch>=2.6,<2.7",
+  "torchvision>=0.21,<0.22",
+  "pyiqa>=0.1.16",
+  "opencv-python-headless>=4.11,<4.12",
+  "imageio-ffmpeg>=0.6,<0.7",
+  "numpy>=1.26,<2",                 # decord's wheels are built against the numpy 1.x ABI
   "decord",
-  "einops",
   "timm>=0.9",
-  "pyiqa",
+  "einops",
   "tqdm",
   "imageio",
-  "imageio-ffmpeg",
-  "setuptools<82",    # the `clip` module pyiqa needs does `from pkg_resources import packaging`; setuptools 82 removed pkg_resources
+  "setuptools<82",                  # the `clip` module pyiqa needs does `from pkg_resources import packaging`; setuptools 82 removed pkg_resources
 ]
 
 [project.scripts]
