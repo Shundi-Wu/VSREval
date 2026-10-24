@@ -15,13 +15,21 @@ Image metrics are the mean over the frames of a video; every metric is then aver
 ## Install and use
 
 ```bash
-git clone https://github.com/Shundi-Wu/vsreval && cd vsreval && uv sync       # one environment for all metrics
-uv run vsreval weights --download                    # DOVER / FasterVQA / RAFT weights -> ~/.cache/vsreval/weights ($VSREVAL_WEIGHTS)
+# inside a clone: one environment for all metrics
+git clone https://github.com/Shundi-Wu/vsreval && cd vsreval && uv sync
+uv run vsreval weights --download                     # DOVER / FasterVQA / RAFT weights -> ~/.cache/vsreval/weights ($VSREVAL_WEIGHTS)
 
 uv run vsreval eval --pred results/UDM10 --gt datasets/UDM10/GT-Video --out results/UDM10/vsreval
 uv run vsreval eval --pred results/UDM10 --metrics dover,fastervqa,ewarp          # no ground truth needed
-uvx --from git+https://github.com/Shundi-Wu/vsreval vsreval eval ...                  # without cloning
+
+# or as a command available everywhere, in its own isolated environment
+OVERRIDES=https://raw.githubusercontent.com/Shundi-Wu/vsreval/main/overrides.txt
+uv tool install git+https://github.com/Shundi-Wu/vsreval --overrides $OVERRIDES
+uvx --from git+https://github.com/Shundi-Wu/vsreval --overrides $OVERRIDES vsreval eval ...   # without installing
 ```
+
+`--overrides` is needed outside a clone: pyiqa requires `openai-clip`, whose package is empty and shadows the CLIP code (CLIP-IQA fails to
+import), and `filterpy`, which does not build; no metric uses either. Inside a clone `pyproject.toml` applies the same overrides.
 
 `--pred` / `--gt` are directories whose entries are video files (`.mp4 .mkv .avi .mov`) or directories of frames (`.png .jpg`), matched by
 name. If the sizes of prediction and ground truth differ, both are cropped to the common centre region.
