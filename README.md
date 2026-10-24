@@ -86,3 +86,9 @@ sampling, the input format conversion and the file handling.
 `src/vsreval/_vendor` holds trimmed copies of DOVER, FAST-VQA and RAFT with their licences; see `_vendor/NOTICE.md` for sources, commits
 and modifications. DOVER and FAST-VQA are under the S-Lab License 1.0 (non-commercial); keep the licence files when redistributing.
 Weights are downloaded on first use and verified by SHA-256 (`weights.py`); they are not part of the repository.
+
+## License
+
+The code of this repository outside `src/vsreval/_vendor` is MIT licensed (`LICENSE`). The vendored DOVER and FAST-VQA code is under the
+S-Lab License 1.0 (non-commercial) and RAFT under BSD-3-Clause; their licence files stay next to the code, so using `vsreval` for the
+video metrics is subject to those terms. The model weights have their own licences.
