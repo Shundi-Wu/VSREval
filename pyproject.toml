@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vsreval"
+version = "0.1.0"
+description = "Evaluation bench for video super-resolution: image metrics (via pyiqa) and the video metrics DOVER, FasterVQA and E*warp."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+  "torch>=2.5",
+  "torchvision>=0.20",
+  "numpy>=1.26,<2",   # decord's wheels are built against the numpy 1.x ABI
+  "opencv-python-headless",
+  "decord",
+  "einops",
+  "timm>=0.9",
+  "pyiqa",
+  "tqdm",
+  "imageio",
+  "imageio-ffmpeg",
+  "clip-anytorch",    # the `clip` module pyiqa needs, see override-dependencies below
+  "setuptools<82",    # clip does `from pkg_resources import packaging`; setuptools 82 removed pkg_resources
+]
+
+[project.scripts]
+vsreval = "vsreval.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vsreval"]
+
+[dependency-groups]
+dev = ["pytest>=9.1.1"]
+
+[tool.uv]
+# pyiqa depends on openai-clip, an sdist whose build produces empty modules with current toolchains; clip-anytorch ships the same `clip`
+# module as a wheel. pyiqa -> facexlib -> filterpy is face tracking, not used by any metric here, and its sdist does not build either.
+override-dependencies = ["openai-clip; sys_platform == 'never'", "filterpy; sys_platform == 'never'"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+torchvision = { index = "pytorch-cu124" }
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[[tool.uv.index]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
